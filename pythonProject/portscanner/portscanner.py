@@ -24,6 +24,8 @@ def scan(target):
     for port in range(port_start_range, port_end_range):
         scan_port(converted_ip, port)
 
+def get_banner(s):
+    return s.recv(1024)
 
 def check_ip(ip):
     try:
@@ -38,12 +40,15 @@ def scan_port(ip, port):
         sock = socket.socket()
         sock.settimeout(0.5)
         sock.connect((ip, port))
-        print("\033[1;36;40m   \n")
-        print('\n'+f'[+] Port {port} Is Open')
-        print("\033[1;37;40m   \n")  # sets console font to white
+        try:
+            banner = get_banner(sock)
+            print("\033[1;36;40m   \n")
+            print('\n'+f'[+] Port {port} Is Open :'+ str(banner.decode().strip('\n')))
+            print("\033[1;37;40m   \n")   # sets console font to white
     except:
-        print("\033[1;31;40m   \n")  # sets color to red
-        print('\n'+f'[-] Port {port} Is Closed')
+       pass
+       #print("\033[1;31;40m   \n")  # sets color to red
+       # print('\n'+f'[-] Port {port} Is Closed')
 
 
 print("\033[1;32;40m   \n")
